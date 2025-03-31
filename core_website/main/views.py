@@ -8,13 +8,6 @@ def index(request):
     return render(request, 'main/index.html', context)
 
 
-def news(request):
-    context = {
-        'title': 'News'
-    }
-    return render(request, 'main/news.html', context)
-
-
 def contacts(request):
     context = {
         'title': 'Contacts'
