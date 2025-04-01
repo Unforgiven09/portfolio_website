@@ -6,6 +6,7 @@ from django.utils.text import slugify
 class Tags(models.Model):
     name = models.CharField(max_length=30, verbose_name='Название')
     slug = models.SlugField(unique=True)
+    description = models.TextField(blank=True, verbose_name='Описание')
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -25,9 +26,12 @@ class Posts(models.Model):
     title = models.CharField(max_length=50, verbose_name='Название')
     content = models.TextField(verbose_name='Текст поста')
     published_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор поста', default=1)
     image = models.URLField(unique=True, null=True, blank=True, verbose_name='Изображение')
     tag = models.ManyToManyField(Tags, related_name='posts', verbose_name='Тег')
     product = models.ManyToManyField('main.Products', related_name='post_products', verbose_name='Товар', blank=True)
+    likes = models.IntegerField(default=0)
+    is_published = models.BooleanField(default=False)
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
@@ -47,7 +51,7 @@ class Posts(models.Model):
 class CommentToPost(models.Model):
     content = models.TextField(verbose_name='Текст комментария')
     post = models.ForeignKey(Posts, on_delete=models.CASCADE, verbose_name='Пост')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор поста')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор комментария', default=1)
     published_date = models.DateTimeField(auto_now_add=True, verbose_name='Время')
 
     def __str__(self):
