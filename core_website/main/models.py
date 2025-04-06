@@ -72,3 +72,11 @@ class ProductImage(models.Model):
     product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='products/')
     alt_text = models.CharField(max_length=100, blank=True)
+
+
+class UserInfo(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_info', verbose_name='Информация о пользователе')
+    first_name = models.CharField(max_length=30, blank=True, verbose_name='Имя')
+    last_name = models.CharField(max_length=30, blank=True, verbose_name='Фамилия')
+    tel = models.CharField(max_length=10, blank=True, verbose_name='Телефон')
+    email = models.EmailField(blank=True, verbose_name='Почта')

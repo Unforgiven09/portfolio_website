@@ -1,0 +1,52 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<section>
+    <div><h3 class="text-center">User profile</h3>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 bg-primary-subtle">
+                    <hr>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Username:</th>
+                            <th scope="col">{{ user }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Full name</td>
+                            <td>{{ user.user_info.first_name }} {{ user.user_info.last_name }}</td>
+
+                        </tr>
+                        <tr>
+                            <td>Telephone</td>
+                            <td>{{ user.user_info.tel }}</td>
+
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>{{ user.user_info.email }}</td>
+
+                        </tr>
+                        <tr>
+                            <td>Else</td>
+                            <td>{{ user.else }}</td>
+                        </tr>
+                        <tr>
+                            <td>Member since</td>
+                            <td>{{ user.date_joined|date:"Y-m-d" }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div><a href="{% url 'change_profile' %}" class="btn btn-info m-2 w-50">Change info</a></div>
+                    <div><a href="" class="btn btn-info m-2 w-50">Change password</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

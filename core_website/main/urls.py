@@ -1,3 +1,4 @@
+from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 from . import views
 
@@ -10,4 +11,9 @@ urlpatterns = [
     path('return_policy/', views.return_policy, name='return_policy'),
     path('partnership/', views.partnership, name='partnership'),
     path('vacancies/', views.vacancies, name='vacancies'),
+    path('accounts/profile/', views.profile, name='profile'),
+    path('accounts/registration/', views.RegisterView.as_view(), name='registration'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('accounts/change-profile/', views.change_profile, name='change_profile'),
 ]
