@@ -37,7 +37,7 @@ class Products(models.Model):
     buttons = models.IntegerField(null=True, verbose_name='Количество кнопок') # для клавиатур и мышек
     guarantee = models.IntegerField(null=True, verbose_name='Гарантия')
     is_available = models.BooleanField(default=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:

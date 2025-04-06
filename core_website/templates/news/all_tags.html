@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-8" style="">
+                <h4 class="text-center">All Tags</h4>
+                {% for tag in all_tags %}
+                <a href="{% url 'tag' name=tag.name %}">{{ tag }}</a>{% if not forloop.last %} | {% endif %}
+                {% endfor %}
+            </div>
+            {% include 'news/side_bar.html' %}
+        </div>
+    </div>
+</section>
+{% endblock %}

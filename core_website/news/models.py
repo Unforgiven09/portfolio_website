@@ -32,7 +32,7 @@ class Posts(models.Model):
     product = models.ManyToManyField('main.Products', related_name='post_products', verbose_name='Товар', blank=True)
     likes = models.IntegerField(default=0)
     is_published = models.BooleanField(default=False)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:

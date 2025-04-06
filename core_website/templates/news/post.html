@@ -1,0 +1,47 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-8" style="">
+                <div class="p-3 text-primary-emphasis bg-light border border-primary-subtle rounded-3 m-3">
+                    <h1>{{ post.title }}</h1>
+                    {% for tag in post.tag.all %}
+                    <span><a
+                            href="{% url 'tag' name=tag.name %}">{{ tag }}</a>{% if not forloop.last %} | {% endif %}</span>
+                    {% endfor %}
+                    <p class="lead">
+                        by <a href="#">{{ post.user }}</a>
+                    </p>
+                    <hr>
+                    <p><span class="glyphicon glyphicon-time"></span> Posted on {{ post.published_date}}</p>
+                    <hr>
+                    <img class="img-responsive w-50" src="{{ post.image }}" alt="">
+                    <hr>
+                    <p class="lead">{{ post.content }}</p>
+                    <hr>
+
+                    <h2>Comments</h2>
+                    {% for comment in comments %}
+                    <div class="mb-2">
+                        <strong>{{ comment.user }}</strong>: {{ comment.content }}<br>
+                        <small>{{ comment.published_date }}</small>
+                    </div>
+                    {% endfor %}
+
+                    {% if user.is_authenticated %}
+                    <h3>Add a comment</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        {% load crispy_forms_tags %}
+                        {{ add_comment|crispy }}
+                        <button type="submit" class="btn btn-primary m-2">Post Comment</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% include 'news/side_bar.html' %}
+        </div>
+    </div>
+</section>
+{% endblock %}

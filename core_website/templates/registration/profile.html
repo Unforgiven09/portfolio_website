@@ -42,8 +42,12 @@
                     <hr>
                 </div>
                 <div class="col-md-4 text-center">
-                    <div><a href="{% url 'change_profile' %}" class="btn btn-info m-2 w-50">Change info</a></div>
-                    <div><a href="" class="btn btn-info m-2 w-50">Change password</a></div>
+                    <div><a href="{% url 'change_profile' %}" class="btn btn-success m-2 w-50">Change info</a></div>
+                    <div><a href="{% url 'password_change' %}" class="btn btn-warning m-2 w-50">Change password</a></div>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger m-2 w-50">Logout</button>
+                    </form>
                 </div>
             </div>
         </div>
