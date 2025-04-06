@@ -90,7 +90,7 @@ def change_profile(request):
     else:
         form = CustomUserChangeForm(instance=user_info)
     context = {
-        'title': 'Your profile',
+        'title': 'Change profile',
         'form': form,
     }
     return render(request, 'registration/change_profile.html', context)

@@ -12,6 +12,9 @@
                     {% endfor %}
                     <p class="lead">
                         by <a href="#">{{ post.user }}</a>
+                        {% if post.user == user %}
+                        <a href="{% url 'change_post' slug=post.slug %}">Change post</a>
+                        {% endif %}
                     </p>
                     <hr>
                     <p><span class="glyphicon glyphicon-time"></span> Posted on {{ post.published_date}}</p>
