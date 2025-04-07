@@ -1,7 +1,7 @@
 <div class="col-4">
     <div class="well m-3">
         <h4 class="text-center">News Tags</h4>
-        {% for tag in all_tags %}
+        {% for tag in recent_tags %}
         <a href="{% url 'tag' tag_slug=tag.slug %}">{{ tag }}</a>{% if not forloop.last %} | {% endif %}
         {% endfor %}
         <p><a href="{% url 'all_tags' %}" class="btn btn-secondary mt-2 w-100">All tags</a></p>

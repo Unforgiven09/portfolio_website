@@ -1,13 +1,16 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Posts, Tags, CommentToPost
 from .forms import TagsForm, PostForm, CommentToPostForm
 
 
 def get_tags():
-    return {'all_tags': Tags.objects.all()}
+    recent_posts = Posts.objects.order_by('-published_date')[:50]
+    recent_tags = Tags.objects.filter(posts__in=recent_posts).annotate(num_posts=Count('posts')
+    ).order_by('-num_posts')[:10]
+    return {'all_tags': Tags.objects.all(), 'recent_tags': recent_tags}
 
 
 def index(request):
