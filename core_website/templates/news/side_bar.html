@@ -1,12 +1,17 @@
 <div class="col-4">
-<div class="well m-3">
-                <h4 class="text-center">News Tags</h4>
-                {% for tag in all_tags %}
-                <a href="{% url 'tag' name=tag.name %}">{{ tag }}</a>{% if not forloop.last %} | {% endif %}
-                {% endfor %}
-                <p><a href="{% url 'all_tags' %}" class="btn btn-secondary m-2 w-100">All tags</a></p>
-                {% if user.is_staff %}
-    <p><a href="{% url 'add_news' %}" class="btn btn-secondary m-2 w-100">Add news</a><a href="{% url 'add_tags' %}" class="btn btn-secondary m-2 w-100">Add tags</a></p>
-    {% endif %}
-            </div>
+    <div class="well m-3">
+        <h4 class="text-center">News Tags</h4>
+        {% for tag in all_tags %}
+        <a href="{% url 'tag' tag_slug=tag.slug %}">{{ tag }}</a>{% if not forloop.last %} | {% endif %}
+        {% endfor %}
+        <p><a href="{% url 'all_tags' %}" class="btn btn-secondary mt-2 w-100">All tags</a></p>
+        <form action="{% url 'search' %}" method="GET" class="input-group bg-secondary rounded-2 mt-2 w-100">
+            <input class="form-control m-2" name="query" type="search" placeholder="Search news" aria-label="Search news"/>
+            <button class="btn btn-info m-2" type="submit">Search</button>
+        </form>
+        {% if user.is_staff %}
+        <p><a href="{% url 'add_news' %}" class="btn btn-secondary mt-4 w-100">Add news</a></p>
+        <p><a href="{% url 'add_tags' %}" class="btn btn-secondary mt-2 w-100">Add tags</a></p>
+        {% endif %}
+    </div>
 </div>

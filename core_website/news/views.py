@@ -1,4 +1,6 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Posts, Tags, CommentToPost
 from .forms import TagsForm, PostForm, CommentToPostForm
@@ -9,7 +11,7 @@ def get_tags():
 
 
 def index(request):
-    posts = Posts.objects.all()
+    posts = Posts.objects.filter(is_published=True)
     context = {
         'title': 'News',
         'posts': posts,
@@ -43,10 +45,10 @@ def post(request, post_slug):
     return render(request, "news/post.html", context)
 
 
-def tag(request, name):
-    t = get_object_or_404(Tags, name=name)
-    posts = Posts.objects.filter(tag=t).order_by('-published_date')
-    context = {'title': f'Tag {name}', 'posts': posts, 'tag': t}
+def tag(request, tag_slug):
+    t = get_object_or_404(Tags, slug=tag_slug)
+    posts = Posts.objects.filter(tag=t, is_published=True).order_by('-published_date')
+    context = {'title': f'Tag {tag_slug}', 'posts': posts, 'tag': t}
     context.update(get_tags())
     return render(request, "news/tag.html", context)
 
@@ -98,3 +100,23 @@ def change_post(request, slug):
     context = {'title': 'Add news','form': form}
     context.update(get_tags())
     return render(request, "news/change_post.html", context)
+
+
+def find_author(request, author):
+    user = User.objects.get(username=author)
+    posts = Posts.objects.filter(user=user)
+    context = {
+        'title': f'News by author {author}',
+        'posts': posts,
+    }
+    context.update(get_tags())
+    return render(request, 'news/index.html', context)
+
+
+def search(request):
+    query = request.GET.get('query')
+    posts = Posts.objects.filter(Q(content__icontains=query) | Q(title__icontains=query))
+    context = {'title': f'News by search: {query}',
+               'posts': posts}
+    context.update(get_tags())
+    return render(request, "news/index.html", context)
