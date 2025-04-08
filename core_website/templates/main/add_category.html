@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<section>
+    <div class="container">
+                <h1 class="page-header">Create new category</h1>
+                <form method="POST" action="{% url 'add_category' %}">
+                    {% csrf_token %}
+                    {% load crispy_forms_tags %}
+                    {{ form|crispy }}
+                    <input type="submit" value="save" class="btn btn-primary m-2">
+                </form>
+            </div>
+</section>
+{% endblock %}

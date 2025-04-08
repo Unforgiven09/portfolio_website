@@ -1,18 +1,12 @@
-<div class="p-3 text-primary-emphasis bg-light border border-primary-subtle rounded-3 m-3">
-    <h2>
-        <a href="{% url 'post' post_slug=post.slug %}">{{ post.title }}</a>
-    </h2>
-    {% for tag in post.tag.all %}
-    <span><a href="{% url 'tag' tag_slug=tag.slug %}">{{ tag }}</a>{% if not forloop.last %} | {% endif %}</span>
-    {% endfor %}
-    <p class="lead">
-        by <a href="{% url 'author' author=post.user.username %}">{{ post.user }}</a>
-    </p>
-    <p><span class="glyphicon glyphicon-time"></span> Posted on {{ post.published_date }}</p>
-    <hr>
-    <img class="img-responsive w-75" src="{{ post.image }}" alt="{{ post.title }}">
-    <hr>
-    <p>{{ post.content|truncatewords:20 }}</p>
-    <a class="btn btn-primary" href="{% url 'post' post_slug=post.slug %}">Read More <span
-            class="glyphicon glyphicon-chevron-right"></span></a>
-</div>
+<h2><a href="{% url 'post' post_slug=post.slug %}">{{ post.title }}</a></h2>
+{% for tag in post.tag.all %}
+<span><a href="{% url 'tag' tag_slug=tag.slug %}">{{ tag }}</a>{% if not forloop.last %} | {% endif %}</span>
+{% endfor %}
+<p class="lead">by <a href="{% url 'author' author=post.user.username %}">{{ post.user }}</a>{% if post.user == user %}
+                        <a href="{% url 'change_post' slug=post.slug %}">Change post</a>
+                        {% endif %}</p>
+<p><span class="glyphicon glyphicon-time"></span> Posted on {{ post.published_date }}</p>
+<hr>
+<img class="img-responsive w-75" src="{{ post.image }}" alt="{{ post.title }}">
+<hr>
+<p>{{ content }}</p>

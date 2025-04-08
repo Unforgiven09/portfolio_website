@@ -30,8 +30,11 @@
                         Categories
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Category 1</a></li>
-                        <li><a class="dropdown-item" href="#">Category 2</a></li>
+                        {% for cat in cats %}
+                        {% if not cat.parent_id %}
+                        <li><a class="dropdown-item" href="{% url 'category' category_slug=cat.slug %}">{{ cat.name }}</a></li>
+                        {% endif %}
+                        {% endfor %}
                         <li>
                             <hr class="dropdown-divider"/>
                         </li>

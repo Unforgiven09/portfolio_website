@@ -14,7 +14,7 @@ def get_tags():
 
 
 def index(request):
-    posts = Posts.objects.filter(is_published=True)
+    posts = Posts.objects.filter(is_published=True).order_by('-published_date')
     context = {
         'title': 'News',
         'posts': posts,

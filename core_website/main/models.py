@@ -31,13 +31,13 @@ class Products(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
     manufacturer = models.CharField(max_length=50, blank=True)
     price = models.IntegerField(null=False, verbose_name='Цена')
-    size = models.CharField(max_length=20, blank=True, verbose_name='Габариты')
-    weight = models.IntegerField(null=True, verbose_name='Вес')
-    extra = models.TextField(blank=True, verbose_name='Дополнительная информация')
-    display_diagonal = models.IntegerField(null=True, verbose_name='Диагональ дисплея') # для мониторов и ноутбуков
-    brief_technical_specifications = models.TextField(blank=True, verbose_name='Короткие технические характеристики') # для компов и ноутбуков
-    buttons = models.IntegerField(null=True, verbose_name='Количество кнопок') # для клавиатур и мышек
-    guarantee = models.IntegerField(null=True, verbose_name='Гарантия')
+    size = models.CharField(max_length=20, blank=True, null=True, verbose_name='Габариты')
+    weight = models.IntegerField(null=True, blank=True, verbose_name='Вес')
+    extra = models.TextField(null=True, blank=True, verbose_name='Дополнительная информация')
+    display_diagonal = models.IntegerField(null=True, blank=True, verbose_name='Диагональ дисплея') # для мониторов и ноутбуков
+    brief_technical_specifications = models.TextField(null=True, blank=True, verbose_name='Короткие технические характеристики') # для компов и ноутбуков
+    buttons = models.IntegerField(null=True, blank=True, verbose_name='Количество кнопок') # для клавиатур и мышек
+    guarantee = models.IntegerField(null=True, blank=True, verbose_name='Гарантия')
     is_available = models.BooleanField(default=True)
     slug = models.SlugField(unique=True, blank=True)
 

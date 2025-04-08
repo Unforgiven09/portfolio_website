@@ -2,6 +2,7 @@
 {% block content %}
 <section>
     <div class="container">
+        <h3>Category: {{ category.name }}</h3>
         {% for product in products %}
         <div class="card" style="width: 18rem;">
             <img src="" class="card-img-top" alt="">
@@ -17,4 +18,3 @@
 
 
 {% endblock %}
-

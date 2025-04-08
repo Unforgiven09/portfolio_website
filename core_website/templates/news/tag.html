@@ -4,9 +4,14 @@
     <div class="container">
         <div class="row">
             <div class="col-8" style="">
-                <h1 class="m-2">{{ tag.description }}</h1>
                 {% for post in posts %}
-                {% include 'news/show_post_default.html' %}
+                <div class="p-3 text-primary-emphasis bg-light border border-primary-subtle rounded-3 m-3">
+                    {% with trimmed_content=post.content|truncatewords:20 %}
+                    {% include 'news/show_post_default.html' with content=trimmed_content %}
+                    {% endwith %}
+                    <a class="btn btn-primary" href="{% url 'post' post_slug=post.slug %}">Read More <span
+                            class="glyphicon glyphicon-chevron-right"></span></a>
+                </div>
                 {% empty %}
                 <p>No news!</p>
                 {% endfor %}
