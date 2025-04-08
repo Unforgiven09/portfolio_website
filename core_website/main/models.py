@@ -1,3 +1,5 @@
+import os
+from PIL import Image
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
@@ -72,11 +74,25 @@ class ProductImage(models.Model):
     product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='products/')
     alt_text = models.CharField(max_length=100, blank=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    thumbnail = models.ImageField(upload_to='products/thumbnails/', blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.image:
+            self.create_thumbnail()
+
+    def create_thumbnail(self):
+        img_path = self.image.path
+        thumb_path = os.path.join(os.path.dirname(img_path), 'thumbnails', os.path.basename(img_path))
+        img = Image.open(img_path)
+        img.thumbnail((200, 200))
+        os.makedirs(os.path.dirname(thumb_path), exist_ok=True)
+        img.save(thumb_path)
+        self.thumbnail = f"products/thumbnails/{os.path.basename(img_path)}"
+        super().save(update_fields={'thumbnail'})
+
+    def __str__(self):
+        return self.product
 
 
-class UserInfo(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_info', verbose_name='Информация о пользователе')
-    first_name = models.CharField(max_length=30, blank=True, verbose_name='Имя')
-    last_name = models.CharField(max_length=30, blank=True, verbose_name='Фамилия')
-    tel = models.CharField(max_length=10, blank=True, verbose_name='Телефон')
-    email = models.EmailField(blank=True, verbose_name='Почта')
