@@ -5,7 +5,7 @@ from .models import Posts, Tags, CommentToPost
 class PostForm(forms.ModelForm):
     class Meta:
         model = Posts
-        exclude = ('published_date', 'slug', 'user', 'likes', )
+        exclude = ('published_date', 'slug', 'user', 'likes', 'thumbnail')
 
 
 class TagsForm(forms.ModelForm):

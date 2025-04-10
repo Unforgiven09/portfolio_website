@@ -1,0 +1,12 @@
+{% extends 'main/base.html' %}
+{% block content %}
+{% load static %}
+<section>
+    <div class="container text-center">
+        <img src="{% static 'errors/403.png' %}" alt="403 Forbidden" style="max-width: 300px;">
+        <h1>Access Denied (403)</h1>
+        <p>You don’t have permission to view this page.</p>
+        <a href="/" class="btn btn-primary">Go Back</a>
+    </div>
+</section>
+{% endblock %}

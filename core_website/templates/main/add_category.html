@@ -3,7 +3,7 @@
 <section>
     <div class="container">
                 <h1 class="page-header">Create new category</h1>
-                <form method="POST" action="{% url 'add_category' %}">
+                <form method="POST">
                     {% csrf_token %}
                     {% load crispy_forms_tags %}
                     {{ form|crispy }}

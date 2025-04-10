@@ -1,0 +1,12 @@
+{% extends 'main/base.html' %}
+{% block content %}
+{% load static %}
+<section>
+    <div class="container text-center">
+        <img src="{% static 'errors/400.png' %}" alt="400 Bad Request" style="max-width: 300px;">
+        <h1>Bad Request (400)</h1>
+        <p>Your request couldn't be processed. Please check your data and try again.</p>
+        <a href="/" class="btn btn-primary">Go Home</a>
+    </div>
+</section>
+{% endblock %}

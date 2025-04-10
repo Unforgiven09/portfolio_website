@@ -1,12 +1,24 @@
+{% load static %}
 <h2><a href="{% url 'post' post_slug=post.slug %}">{{ post.title }}</a></h2>
-{% for tag in post.tag.all %}
-<span><a href="{% url 'tag' tag_slug=tag.slug %}">{{ tag }}</a>{% if not forloop.last %} | {% endif %}</span>
-{% endfor %}
+<span>Tags:
+    {% for tag in post.tag.all %}<a href="{% url 'tag' tag_slug=tag.slug %}">{{ tag }}</a>
+        {% if not forloop.last %} | {% endif %}
+    {% endfor %}
+    {% if post.product %}
+        {% for prod in post.product.all %}
+            {% if forloop.first %}Products: {% endif %}
+            <a href="{% url 'product' product_slug=prod.slug %}">{{ prod }}</a>
+            {% if not forloop.last %} | {% endif %}
+        {% endfor %}
+    {% endif %}
+    </span>
 <p class="lead">by <a href="{% url 'author' author=post.user.username %}">{{ post.user }}</a>{% if post.user == user %}
-                        <a href="{% url 'change_post' slug=post.slug %}">Change post</a>
-                        {% endif %}</p>
-<p><span class="glyphicon glyphicon-time"></span> Posted on {{ post.published_date }}</p>
+    <a href="{% url 'change_post' slug=post.slug %}">Change post</a>
+    {% endif %}</p>
+<p>Posted on {{ post.published_date }}</p>
 <hr>
-<img class="img-responsive w-75" src="{{ post.image }}" alt="{{ post.title }}">
+<img class="img-responsive w-75"
+     src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'errors/News-Article-Not-Found.png' %}{% endif %}"
+     alt="{{ post.title }}">
 <hr>
 <p>{{ content }}</p>

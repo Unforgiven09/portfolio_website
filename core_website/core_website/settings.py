@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-i#qyt$#uhc&$gio$x*wvt_hn@azm9*q1qq#y0_$@p=!h3n$^i+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'pc_builder',
     'crispy_forms',
     "crispy_bootstrap4",
+    'easy_thumbnails',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -130,7 +131,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 
 # Default primary key field type

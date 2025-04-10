@@ -1,3 +1,5 @@
+import os
+from PIL import Image
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
@@ -27,17 +29,37 @@ class Posts(models.Model):
     content = models.TextField(verbose_name='Текст поста')
     published_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор поста', default=1)
-    image = models.URLField(unique=True, null=True, blank=True, verbose_name='Изображение')
+    image = models.ImageField(upload_to='news/', unique=False, null=True, blank=True, verbose_name='Изображение')
     tag = models.ManyToManyField(Tags, related_name='posts', verbose_name='Тег')
     product = models.ManyToManyField('main.Products', related_name='post_products', verbose_name='Товар', blank=True)
     likes = models.IntegerField(default=0)
     is_published = models.BooleanField(default=False)
     slug = models.SlugField(unique=True, blank=True)
+    thumbnail = models.ImageField(upload_to='news/thumbnails/', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title, allow_unicode=True)
+
+        is_new = not self.pk
         super().save(*args, **kwargs)
+
+        if self.image and is_new:
+            thumb_path = self.create_thumbnail()
+            self.thumbnail = thumb_path
+            super().save(update_fields=['thumbnail'])
+
+    def create_thumbnail(self):
+        img_path = self.image.path
+        thumb_dir = os.path.join(os.path.dirname(img_path), 'thumbnails')
+        os.makedirs(thumb_dir, exist_ok=True)
+        thumb_path = os.path.join(thumb_dir, os.path.basename(img_path))
+
+        img = Image.open(img_path)
+        img.thumbnail((200, 200))
+        img.save(thumb_path)
+
+        return f"news/thumbnails/{os.path.basename(img_path)}"
 
     def __str__(self):
         return self.title

@@ -2,9 +2,7 @@
 {% block content %}
 <section>
     <div class="container">
-        <div class="row">
-            <div class="col-8" style="">
-                <h1 class="page-header">Create new tag</h1>
+                <h1 class="page-header">Create new product</h1>
                 <form method="POST">
                     {% csrf_token %}
                     {% load crispy_forms_tags %}
@@ -12,8 +10,5 @@
                     <input type="submit" value="save" class="btn btn-primary m-2">
                 </form>
             </div>
-            {% include 'news/side_bar.html' %}
-        </div>
-    </div>
 </section>
 {% endblock %}

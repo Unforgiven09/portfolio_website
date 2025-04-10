@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-8" style="">
                 <h1 class="page-header">Create new post</h1>
-                <form method="POST" action="{% url 'add_news' %}">
+                <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     {% load crispy_forms_tags %}
                     {{ form|crispy }}

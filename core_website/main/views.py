@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from .models import Products, Category, ProductImage
-from .forms import CatsForm
+from .forms import CategoryForm, ProductForm, ProductImageForm, CommentToProductForm
 
 
 def index(request):
@@ -14,10 +14,10 @@ def index(request):
 
 
 def product(request, product_slug):
-    product = Products.objects.filter(slug=product_slug)
+    prod = Products.objects.filter(slug=product_slug)
     context = {
-        'title': f'Product: {product.name}',
-        'product': product
+        'title': f'Product: {prod}',
+        'product': prod
     }
     return render(request, 'main/product.html', context)
 
@@ -36,11 +36,24 @@ def category(request, category_slug):
 @login_required
 def add_category(request):
     if request.method == 'POST':
-        form = CatsForm(request.POST)
+        form = CategoryForm(request.POST)
         if form.is_valid():
             form.save()
             return index(request)
     else:
-        form = CatsForm()
+        form = CategoryForm()
     context = {'title': 'Add category', 'form': form}
     return render(request, "main/add_category.html", context)
+
+
+@login_required
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return index(request)
+    else:
+        form = ProductForm()
+    context = {'title': 'Add product', 'form': form}
+    return render(request, "main/add_product.html", context)

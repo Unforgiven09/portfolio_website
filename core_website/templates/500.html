@@ -1,0 +1,12 @@
+{% extends 'main/base.html' %}
+{% block content %}
+{% load static %}
+<section>
+    <div class="container text-center">
+        <img src="{% static 'errors/500.png' %}" alt="500 Server Error" style="max-width: 300px;">
+        <h1>Internal Server Error (500)</h1>
+        <p>Something went wrong on our side. Please try again later.</p>
+        <a href="/" class="btn btn-primary">Return Home</a>
+    </div>
+</section>
+{% endblock %}
