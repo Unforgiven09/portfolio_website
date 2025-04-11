@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<section>
+    <div class="container">
+        <a href="{% url 'add_banner_add' %}" class="btn btn-secondary">Add banner</a>
+        {% for banner in banners %}
+        <p>{{ banner.name }}</p>
+        <img src="{{ banner.image.url }}">
+        <span>{% if not banner.is_published %}Not {% endif %}Published <a href="{% url 'add_banner' banner_slug=banner.slug %}">Change banner</a></span>
+        {% endfor %}
+            </div>
+</section>
+
+
+{% endblock %}

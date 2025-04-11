@@ -1,5 +1,5 @@
 from django import forms
-from .models import Category, Products, ProductImage, CommentToProduct
+from .models import Category, Products, ProductImage, CommentToProduct, Banner
 
 
 class CategoryForm(forms.ModelForm):
@@ -24,3 +24,9 @@ class CommentToProductForm(forms.ModelForm):
     class Meta:
         model = CommentToProduct
         exclude = ('published_date', 'user', )
+
+
+class BannerForm(forms.ModelForm):
+    class Meta:
+        model = Banner
+        exclude = ('created_date', 'user', 'slug')

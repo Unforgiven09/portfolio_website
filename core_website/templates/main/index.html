@@ -3,17 +3,44 @@
 {% load static %}
 <section>
     <div class="container">
-        {% for product in products %}
-        <div class="card" style="width: 18rem;">
-            <img src="{% static 'errors/Product-Not-Found.png' %}" class="card-img-top" alt="">
-            <div class="card-body">
-                <h5 class="card-title">{{ product.name }}</h5>
-                <p class="card-text">{{ product.description }}</p>
-                <a href="{% url 'product' product_slug=product.slug %}" class="btn btn-primary">View more</a>
+        <div id="carouselExample" class="carousel slide">
+            <div class="carousel-inner">
+                {% for banner in banners %}
+                {% if banner.is_published %}
+                {% if forloop.first %}
+                <div class="carousel-item active">
+                    {% else %}
+                    <div class="carousel-item">
+                        {% endif %}
+                        <img src="{{ banner.image.url }}" loading="lazy" class="d-block w-100" alt="{{ banner.name }}">
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                        data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                        data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
         </div>
-        {% endfor %}
-    </div>
+        <div class="container">
+            {% for product in products %}
+            <div class="card" style="width: 18rem;">
+                <img src="{% static 'errors/Product-Not-Found.png' %}" class="card-img-top" alt="">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                    <a href="{% url 'product' product_slug=product.slug %}" class="btn btn-primary">View more</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 </section>
 
 

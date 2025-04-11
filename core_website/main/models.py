@@ -96,3 +96,18 @@ class ProductImage(models.Model):
         return self.product
 
 
+class Banner(models.Model):
+    name = models.CharField(max_length=50, verbose_name='Название')
+    image = models.ImageField(upload_to='main/banners/', unique=False, null=True, blank=True, verbose_name='Изображение')
+    is_published = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор баннера')
+    created_date = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
+    slug = models.SlugField(unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name, allow_unicode=True)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
