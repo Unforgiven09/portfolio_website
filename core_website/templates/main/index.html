@@ -3,7 +3,7 @@
 {% load static %}
 <section>
     <div class="container">
-        <div id="carouselExample" class="carousel slide">
+        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 {% for banner in banners %}
                 {% if banner.is_published %}

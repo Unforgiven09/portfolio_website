@@ -10,6 +10,8 @@ class Category(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField (blank=True, verbose_name='Описание')
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    is_parent = models.BooleanField(default=False)
+    is_main = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.slug:

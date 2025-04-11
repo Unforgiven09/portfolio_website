@@ -36,15 +36,27 @@ def category(request, category_slug):
 
 
 @login_required
-def add_category(request):
-    if request.method == 'POST':
-        form = CategoryForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return index(request)
+def add_category(request, category_slug=None):
+    if category_slug is None:
+        title = 'Add new category'
+        if request.method == 'POST':
+            form = CategoryForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('index')
+        else:
+            form = CategoryForm()
     else:
-        form = CategoryForm()
-    context = {'title': 'Add category', 'form': form}
+        category_to_change = get_object_or_404(Category, slug=category_slug)
+        title = f'Change banner: {category_to_change.name}'
+        if request.method == 'POST':
+            form = CategoryForm(request.POST, instance=category_to_change)
+            if form.is_valid():
+                form.save()
+                return redirect('index')
+        else:
+            form = CategoryForm(instance=category_to_change)
+    context = {'title': title, 'form': form}
     return render(request, "main/add_category.html", context)
 
 
@@ -87,15 +99,38 @@ def add_banner(request, banner_slug=None):
         else:
             form = BannerForm(instance=banner_to_change)
     context = {'title': title, 'form': form}
-    if banner_slug:
-        context['banner'] = banner_to_change
     return render(request, "main/add_banner.html", context)
 
 
-def all_banners(request):
-    banners = Banner.objects.filter()
+def admin_banners(request):
+    banners = Banner.objects.all()
     context = {
         'title': 'All banners',
         'banners': banners,
     }
-    return render(request, 'main/all_banners.html', context)
+    return render(request, 'main/admin_banners.html', context)
+
+
+def all_categories(request):
+    categories = Category.objects.all()
+    context = {
+        'title': 'All categories',
+        'categories': categories,
+    }
+    return render(request, 'main/all_categories.html', context)
+
+
+def admin_categories(request):
+    categories = Category.objects.all()
+    context = {
+        'title': 'All categories',
+        'categories': categories,
+    }
+    return render(request, 'main/admin_categories.html', context)
+
+
+def admin_panel(request):
+    context = {
+        'title': 'Admin panel',
+    }
+    return render(request, 'main/admin_panel.html', context)

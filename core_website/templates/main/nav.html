@@ -31,17 +31,14 @@
                     </a>
                     <ul class="dropdown-menu">
                         {% for cat in cats %}
-                        {% if not cat.parent_id %}
                         <li><a class="dropdown-item" href="{% url 'category' category_slug=cat.slug %}">{{ cat.name }}</a></li>
-                        {% endif %}
                         {% endfor %}
                         <li>
                             <hr class="dropdown-divider"/>
                         </li>
-                        <li><a class="dropdown-item" href="#">All categories</a></li>
+                        <li><a class="dropdown-item" href="{% url 'all_categories' %}">All categories</a></li>
                     </ul>
                 </li>
-
                 <li class="nav-item dropdown">
                     <a
                             class="nav-link dropdown-toggle nav-size"
@@ -63,29 +60,29 @@
                 <li class="nav-item">
                     <a class="nav-link nav-size" href="#">Cart</a>
                 </li>
+                {% if user.is_staff %}
+                <li class="nav-item">
+                    <a class="nav-link nav-size" href="{% url 'admin_panel' %}">Admin panel</a>
+                </li>
+                {% endif %}
             </ul>
             <form class="d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
                 <button class="btn btn-outline-light" type="submit">Search</button>
             </form>
             <div>
-
                 {% if user.is_authenticated %}
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a href="{% url 'profile' %}" class="btn btn-outline-light m-2">{{ user }}</a>
                     </li>
                 </ul>
-
                 {% else %}
-
                 <form class="d-flex" action="{% url 'login' %}" style="margin-left: 8px;">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-outline-light">Login</button>
                 </form>
-
                 {% endif %}
-
             </div>
         </div>
     </div>
