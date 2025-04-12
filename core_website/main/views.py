@@ -43,7 +43,7 @@ def add_category(request, category_slug=None):
             form = CategoryForm(request.POST)
             if form.is_valid():
                 form.save()
-                return redirect('index')
+                return redirect('admin_categories')
         else:
             form = CategoryForm()
     else:
@@ -53,7 +53,7 @@ def add_category(request, category_slug=None):
             form = CategoryForm(request.POST, instance=category_to_change)
             if form.is_valid():
                 form.save()
-                return redirect('index')
+                return redirect('admin_categories')
         else:
             form = CategoryForm(instance=category_to_change)
     context = {'title': title, 'form': form}
@@ -61,15 +61,27 @@ def add_category(request, category_slug=None):
 
 
 @login_required
-def add_product(request):
-    if request.method == 'POST':
-        form = ProductForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return index(request)
+def add_product(request, product_slug=None):
+    if product_slug is None:
+        title = 'Add new product'
+        if request.method == 'POST':
+            form = ProductForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('admin_products')
+        else:
+            form = ProductForm()
     else:
-        form = ProductForm()
-    context = {'title': 'Add product', 'form': form}
+        product_to_change = get_object_or_404(Products, slug=product_slug)
+        title = f'Change banner: {product_to_change.name}'
+        if request.method == 'POST':
+            form = ProductForm(request.POST, instance=product_to_change)
+            if form.is_valid():
+                form.save()
+                return redirect('admin_products')
+        else:
+            form = ProductForm(instance=product_to_change)
+    context = {'title': title, 'form': form}
     return render(request, "main/add_product.html", context)
 
 
@@ -127,6 +139,15 @@ def admin_categories(request):
         'categories': categories,
     }
     return render(request, 'main/admin_categories.html', context)
+
+
+def admin_products(request):
+    products = Products.objects.all()
+    context = {
+        'title': 'All products',
+        'products': products,
+    }
+    return render(request, 'main/admin_products.html', context)
 
 
 def admin_panel(request):

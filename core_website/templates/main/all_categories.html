@@ -2,10 +2,47 @@
 {% block content %}
 <section>
     <div class="container">
-        {% for category in categories %}
-        <p>{{ category.name }}</p>
-        <span></span>
-        {% endfor %}
+        <div class="accordion" id="accordionCategories">
+            {% for category in categories %}
+            {% if category.is_parent %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#{{ category.name }}" aria-expanded="true"
+                            aria-controls="{{ category.name }}">
+                        {{ category.name }}
+                    </button>
+                </h2>
+                <div id="{{ category.name }}" class="accordion-collapse collapse" data-bs-parent="#accordionCategories">
+                    <div class="accordion-body">
+                        <ul>
+                            {% for child in categories %}
+                            {% if child.parent.id == category.id %}
+                            <li><a href="{% url 'category' category_slug=child.slug %}">{{ child.name }}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
             </div>
+            {% elif category.is_main %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#{{ category.name }}" aria-expanded="true"
+                            aria-controls="{{ category.name }}">
+                        {{ category.name }}
+                    </button>
+                </h2>
+                <div id="{{ category.name }}" class="accordion-collapse collapse" data-bs-parent="#accordionCategories">
+                    <div class="accordion-body">
+                        <a href="{% url 'category' category_slug=category.slug %}">{{ category.name }}</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
 </section>
 {% endblock %}

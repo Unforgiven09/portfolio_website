@@ -1,0 +1,11 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<section>
+    <div class="container">
+        <a href="{% url 'add_product_new' %}">Add new product</a>
+        {% for product in products %}
+        <p>{{ product.name }} <a href="{% url 'add_product' product_slug=product.slug %}">Change</a></p>
+        {% endfor %}
+            </div>
+</section>
+{% endblock %}
