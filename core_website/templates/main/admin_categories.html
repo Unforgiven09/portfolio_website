@@ -2,10 +2,11 @@
 {% block content %}
 <section>
     <div class="container">
-        <a href="{% url 'add_category_new' %}">Add new category</a>
+        <a href="{% url 'add_category_new' %}" class="btn btn-secondary mt-2">Add new category</a>
         {% for category in categories %}
-        <p>{{ category.name }} {% if category.parent %}Parent: {{ category.parent }}{% endif %}<a href="{% url 'add_category' category_slug=category.slug %}">Change</a></p>
+        <p>{{ category.name }} {% if category.parent %}Parent: {{ category.parent }}{% endif %}<a
+                href="{% url 'add_category' category_slug=category.slug %}">Change</a></p>
         {% endfor %}
-            </div>
+    </div>
 </section>
 {% endblock %}

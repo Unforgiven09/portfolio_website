@@ -15,7 +15,15 @@
 <p class="lead">by <a href="{% url 'author' author=post.user.username %}">{{ post.user }}</a>{% if post.user == user %}
     <a href="{% url 'change_post' slug=post.slug %}">Change post</a>
     {% endif %}</p>
-<p>Posted on {{ post.published_date }}</p>
+<p><span>Posted on {{ post.published_date }}
+  <button id="like-btn-{{ post.id }}" onclick="toggleLike({{ post.id }})" class="btn btn-outline-warning">
+  {% if post.id in liked_post_ids %}
+    💖 {{ post.likes.count }}
+  {% else %}
+    🤍 {{ post.likes.count }}
+  {% endif %}
+</button></span>
+</p>
 <hr>
 <img class="img-responsive w-75"
      src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'errors/News-Article-Not-Found.png' %}{% endif %}"

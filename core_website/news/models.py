@@ -32,7 +32,6 @@ class Posts(models.Model):
     image = models.ImageField(upload_to='news/', unique=False, null=True, blank=True, verbose_name='Изображение')
     tag = models.ManyToManyField(Tags, related_name='posts', verbose_name='Тег')
     product = models.ManyToManyField('main.Products', related_name='post_products', verbose_name='Товар', blank=True)
-    likes = models.IntegerField(default=0)
     is_published = models.BooleanField(default=False)
     slug = models.SlugField(unique=True, blank=True)
     thumbnail = models.ImageField(upload_to='news/thumbnails/', blank=True, null=True)
@@ -83,3 +82,17 @@ class CommentToPost(models.Model):
         verbose_name = 'Комментарий к посту'
         verbose_name_plural = 'Комментарии к посту'
         ordering = ['-published_date']
+
+
+class Likes(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    post = models.ForeignKey(Posts, on_delete=models.CASCADE, verbose_name='Пост', related_name='likes')
+    liked_at = models.DateTimeField(auto_now_add=True, verbose_name='Время лайка')
+
+    class Meta:
+        unique_together = ('user', 'post')
+        verbose_name = 'Лайк'
+        verbose_name_plural = 'Лайки'
+
+    def __str__(self):
+        return f"{self.user.username} лайкнул {self.post.title}"

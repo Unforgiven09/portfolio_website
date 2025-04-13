@@ -2,7 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q, Count
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Posts, Tags, CommentToPost
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
+from .models import Posts, Tags, CommentToPost, Likes
 from .forms import TagsForm, PostForm, CommentToPostForm
 
 
@@ -15,9 +17,15 @@ def get_tags():
 
 def index(request):
     posts = Posts.objects.filter(is_published=True).order_by('-published_date')
+    liked_post_ids = []
+
+    if request.user.is_authenticated:
+        liked_post_ids = list(Likes.objects.filter(user=request.user).values_list('post_id', flat=True))
+
     context = {
         'title': 'News',
         'posts': posts,
+        'liked_post_ids': liked_post_ids,
     }
     context.update(get_tags())
     return render(request, 'news/index.html', context)
@@ -123,3 +131,24 @@ def search(request):
                'posts': posts}
     context.update(get_tags())
     return render(request, "news/index.html", context)
+
+
+@require_POST
+@login_required
+def toggle_like(request):
+    post_id = request.POST.get("post_id")
+    post = Posts.objects.get(id=post_id)
+    like, created = Likes.objects.get_or_create(user=request.user, post=post)
+
+    if not created:
+        like.delete()
+        liked = False
+    else:
+        liked = True
+
+    like_count = Likes.objects.filter(post=post).count()
+
+    return JsonResponse({
+        "liked": liked,
+        "like_count": like_count
+    })

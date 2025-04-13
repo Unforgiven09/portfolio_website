@@ -11,4 +11,5 @@ urlpatterns = [
     path("add-tags/", views.add_tags, name="add_tags"),
     path("change-post/<slug:slug>/", views.change_post, name="change_post"),
     path("search/", views.search, name="search"),
+    path('toggle-like/', views.toggle_like, name='toggle_like'),
 ]

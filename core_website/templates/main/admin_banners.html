@@ -2,12 +2,13 @@
 {% block content %}
 <section>
     <div class="container">
-        <a href="{% url 'add_banner_new' %}" class="btn btn-secondary">Add banner</a>
+        <a href="{% url 'add_banner_new' %}" class="btn btn-secondary mt-2">Add banner</a>
         {% for banner in banners %}
         <p>{{ banner.name }}</p>
         <img src="{{ banner.image.url }}">
-        <span>{% if not banner.is_published %}Not {% endif %}Published <a href="{% url 'add_banner' banner_slug=banner.slug %}">Change banner</a></span>
+        <span>{% if not banner.is_published %}Not {% endif %}Published <a
+                href="{% url 'add_banner' banner_slug=banner.slug %}">Change banner</a></span>
         {% endfor %}
-            </div>
+    </div>
 </section>
 {% endblock %}

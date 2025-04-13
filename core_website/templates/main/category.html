@@ -2,8 +2,19 @@
 {% block content %}
 <section>
     <div class="container">
+        <div class="p-3 text-info-emphasis bg-info-subtle border border-info-subtle rounded-3 mt-2 mb-2">
         <h3>Category: {{ category.name }}</h3>
         <p>{{ category.description }}</p>
+            </div>
+        {% if category.is_parent %}
+        <ul>
+            {% for child in categories %}
+            {% if child.parent.id == category.id %}
+            <li><a href="{% url 'category' category_slug=child.slug %}">{{ child.name }}</a></li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        {% else %}
         {% for product in products %}
         <div class="card" style="width: 18rem;">
             <img src="" class="card-img-top" alt="">
@@ -14,6 +25,7 @@
             </div>
         </div>
         {% endfor %}
+        {% endif %}
     </div>
 </section>
 

@@ -26,5 +26,26 @@
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  function toggleLike(postId) {
+    $.ajax({
+      url: '{% url "toggle_like" %}',
+      type: 'POST',
+      data: {
+        'post_id': postId,
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+      },
+      success: function(response) {
+        const btn = $('#like-btn-' + postId);
+        if (response.liked) {
+          btn.text('💖 ' + response.like_count);
+        } else {
+          btn.text('🤍 ' + response.like_count);
+        }
+      }
+    });
+  }
+</script>
 </body>
 </html>

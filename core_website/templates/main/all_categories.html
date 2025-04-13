@@ -15,13 +15,13 @@
                 </h2>
                 <div id="{{ category.name }}" class="accordion-collapse collapse" data-bs-parent="#accordionCategories">
                     <div class="accordion-body">
-                        <ul>
-                            {% for child in categories %}
-                            {% if child.parent.id == category.id %}
-                            <li><a href="{% url 'category' category_slug=child.slug %}">{{ child.name }}</a></li>
-                            {% endif %}
-                            {% endfor %}
-                        </ul>
+                        <div class="list-group">
+                                {% for child in categories %}
+                                {% if child.parent.id == category.id %}
+                                <a href="{% url 'category' category_slug=child.slug %}" class="list-group-item list-group-item-action bg-info-subtle">{{ child.name }}</a>
+                                {% endif %}
+                                {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -36,8 +36,10 @@
                 </h2>
                 <div id="{{ category.name }}" class="accordion-collapse collapse" data-bs-parent="#accordionCategories">
                     <div class="accordion-body">
-                        <a href="{% url 'category' category_slug=category.slug %}">{{ category.name }}</a>
+                        <div class="list-group">
+                        <a href="{% url 'category' category_slug=category.slug %}" class="list-group-item list-group-item-action bg-info-subtle">{{ category.name }}</a>
                     </div>
+                        </div>
                 </div>
             </div>
             {% endif %}

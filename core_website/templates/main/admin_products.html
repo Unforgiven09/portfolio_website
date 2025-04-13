@@ -2,10 +2,10 @@
 {% block content %}
 <section>
     <div class="container">
-        <a href="{% url 'add_product_new' %}">Add new product</a>
+        <a href="{% url 'add_product_new' %}" class="btn btn-secondary mt-2">Add new product</a>
         {% for product in products %}
         <p>{{ product.name }} <a href="{% url 'add_product' product_slug=product.slug %}">Change</a></p>
         {% endfor %}
-            </div>
+    </div>
 </section>
 {% endblock %}

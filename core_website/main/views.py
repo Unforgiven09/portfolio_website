@@ -26,11 +26,13 @@ def product(request, product_slug):
 
 def category(request, category_slug):
     cat = get_object_or_404(Category, slug=category_slug)
+    categories = Category.objects.all()
     products = Products.objects.filter(category=cat, is_available=True)
     context = {
         'title': f'Category: {cat.name}',
         'products': products,
         'category': cat,
+        'categories': categories,
     }
     return render(request, 'main/category.html', context)
 
