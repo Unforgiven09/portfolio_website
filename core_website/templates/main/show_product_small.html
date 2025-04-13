@@ -1,0 +1,8 @@
+{% load static %}
+<div class="card" style="width: 18rem;">
+    <a href="{% url 'product' product_slug=product.slug %}"><img src="{% static 'errors/Product-Not-Found.png' %}" class="card-img-top" alt=""></a>
+    <div class="card-body">
+        <h5 class="card-title">{{ product.name|truncatechars:40 }}</h5>
+        <p>${{ product.real_price }}<a href="#"><img src="{% static 'main/Cart.jpg' %}" class="rounded float-end" alt="Cart"></a></p>
+    </div>
+</div>

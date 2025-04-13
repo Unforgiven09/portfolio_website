@@ -3,15 +3,8 @@
 {% block content %}
 <section>
     <div class="container">
-        {% for p in product %}
-        <div class="card" style="width: 18rem;">
-            <img src="{% static 'errors/Product-Not-Found.png' %}" class="card-img-top" alt="">
-            <div class="card-body">
-                <h5 class="card-title">{{ p.name }}</h5>
-                <p class="card-text">{{ p.description }}</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
+        {% for product in product_info %}
+        {% include 'main/show_product_small.html' %}
         {% endfor %}
     </div>
 </section>

@@ -6,6 +6,8 @@ from .forms import CategoryForm, ProductForm, ProductImageForm, CommentToProduct
 
 def index(request):
     products = Products.objects.filter(is_available=True)
+    for p in products:
+        p.real_price = p.price / 100
     banners = Banner.objects.filter(is_published=True)
     context = {
         'title': 'CORE: computers and components',
@@ -17,9 +19,11 @@ def index(request):
 
 def product(request, product_slug):
     prod = Products.objects.filter(slug=product_slug)
+    for p in prod:
+        p.real_price = p.price / 100
     context = {
         'title': f'Product: {prod}',
-        'product': prod
+        'product_info': prod
     }
     return render(request, 'main/product.html', context)
 
@@ -28,6 +32,8 @@ def category(request, category_slug):
     cat = get_object_or_404(Category, slug=category_slug)
     categories = Category.objects.all()
     products = Products.objects.filter(category=cat, is_available=True)
+    for p in products:
+        p.real_price = p.price / 100
     context = {
         'title': f'Category: {cat.name}',
         'products': products,
