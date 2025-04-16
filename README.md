@@ -10,4 +10,5 @@ pip                 25.0.1 \
 setuptools          68.2.0 \
 sqlparse            0.5.3 \
 tzdata              2025.1 \
-wheel               0.41.2 
+wheel               0.41.2 \
+easy-thumbnails     2.10
