@@ -3,6 +3,14 @@
     <a href="{% url 'product' product_slug=product.slug %}"><img src="{% static 'errors/Product-Not-Found.png' %}" class="card-img-top" alt=""></a>
     <div class="card-body">
         <h5 class="card-title">{{ product.name|truncatechars:40 }}</h5>
-        <p>${{ product.real_price }}<a href="#"><img src="{% static 'main/Cart.jpg' %}" class="rounded float-end" alt="Cart"></a></p>
+        ${{ product.real_price }}
+            <form method="post" action="{% url 'cart:cart_add' product_id=product.id %}" class="float-end">
+    {% csrf_token %}
+    <input type="hidden" name="quantity" value="1">
+    <input type="hidden" name="update" value="False">
+    <button type="submit" style="border: none; background: none;">
+        <img src="{% static 'main/Cart.jpg' %}" class="rounded" alt="Cart">
+    </button>
+</form>
     </div>
 </div>

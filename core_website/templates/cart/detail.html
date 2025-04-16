@@ -1,0 +1,59 @@
+{% extends 'main/base.html' %}
+{% block content %}
+{% load static %}
+<section>
+    <div class="container">
+        <h1>{{ title }}</h1>
+        <table class="table">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Product name</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in cart %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ item.product.name }}<a href="{% url 'cart:cart_remove' item.product.id %}"
+                                              class="link-secondary link-offset-2 link-underline link-underline-opacity-0 float-end"
+                                              style="margin-left:10px;">remove</a></td>
+                <td>
+                    <form method="post" action="{% url 'cart:cart_decrement' product_id=item.product.id %}"
+                          style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" style="border: none; background: none;">-</button>
+                    </form>
+                    {{ item.quantity }}
+                    <form method="post" action="{% url 'cart:cart_add' product_id=item.product.id %}"
+                          style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantity" value="1">
+                        <input type="hidden" name="update" value="False">
+                        <button type="submit" style="border: none; background: none;">+</button>
+                    </form>
+                </td>
+                <td>{{ item.new_price }}</td>
+                <td>{{ item.new_total_price }}</td>
+            </tr>
+            {% empty %}
+            <th scope="row"></th>
+            <td>No products in cart. Add something to purchase!</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            {% endfor %}
+            </tbody>
+        </table>
+        <hr>
+        Order price:<span class="float-end">{{ order_price }} $</span>
+        <p><a class="btn btn-dark float-end m-2" aria-current="page" href="{% url 'index' %}">Create order</a>
+            <a class="btn btn-outline-dark float-end m-2" aria-current="page" href="{% url 'index' %}">Continue
+                shopping</a>
+        </p>
+    </div>
+</section>
+{% endblock %}

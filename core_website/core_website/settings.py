@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'main',
     'news',
     'info',
+    'cart',
     'user_info',
     'pc_builder',
     'crispy_forms',
@@ -145,3 +146,5 @@ LOGIN_REDIRECT_URL = '/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = "/media/"
+
+CART_SESSION_ID = 'cart'
