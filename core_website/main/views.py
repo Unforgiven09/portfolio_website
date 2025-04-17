@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.forms import modelformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Products, Category, ProductImage, Banner
 from .forms import CategoryForm, ProductForm, ProductImageForm, CommentToProductForm, BannerForm
@@ -6,8 +7,6 @@ from .forms import CategoryForm, ProductForm, ProductImageForm, CommentToProduct
 
 def index(request):
     products = Products.objects.filter(is_available=True)
-    for p in products:
-        p.real_price = p.price / 100
     banners = Banner.objects.filter(is_published=True)
     context = {
         'title': 'CORE: computers and components',
@@ -19,8 +18,6 @@ def index(request):
 
 def product(request, product_slug):
     prod = Products.objects.filter(slug=product_slug)
-    for p in prod:
-        p.real_price = p.price / 100
     context = {
         'title': f'Product: {prod}',
         'product_info': prod
@@ -32,8 +29,6 @@ def category(request, category_slug):
     cat = get_object_or_404(Category, slug=category_slug)
     categories = Category.objects.all()
     products = Products.objects.filter(category=cat, is_available=True)
-    for p in products:
-        p.real_price = p.price / 100
     context = {
         'title': f'Category: {cat.name}',
         'products': products,
@@ -70,26 +65,29 @@ def add_category(request, category_slug=None):
 
 @login_required
 def add_product(request, product_slug=None):
+    ProductImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, extra=1, can_delete=True)
     if product_slug is None:
         title = 'Add new product'
-        if request.method == 'POST':
-            form = ProductForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('admin_products')
-        else:
-            form = ProductForm()
+        product = None
     else:
-        product_to_change = get_object_or_404(Products, slug=product_slug)
-        title = f'Change banner: {product_to_change.name}'
-        if request.method == 'POST':
-            form = ProductForm(request.POST, instance=product_to_change)
-            if form.is_valid():
-                form.save()
-                return redirect('admin_products')
-        else:
-            form = ProductForm(instance=product_to_change)
-    context = {'title': title, 'form': form}
+        product = get_object_or_404(Products, slug=product_slug)
+        title = f'Change banner: {product.name}'
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=product)
+        formset = ProductImageFormSet(request.POST, request.FILES,
+                                      queryset=ProductImage.objects.filter(product=product))
+        if form.is_valid() and formset.is_valid():
+            product_instance = form.save()
+            images = formset.save(commit=False)
+            for image in images:
+                image.product = product_instance
+                image.save()
+            formset.save_m2m()
+            return redirect('admin_products')
+    else:
+        form = ProductForm(instance=product)
+        formset = ProductImageFormSet(queryset=ProductImage.objects.filter(product=product))
+    context = {'title': title, 'form': form, 'formset': formset}
     return render(request, "main/add_product.html", context)
 
 

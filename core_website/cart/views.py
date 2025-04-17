@@ -39,11 +39,5 @@ def cart_remove(request, product_id):
 
 def cart_detail(request):
     cart = Cart(request)
-    order_price = 0
-    for c in cart:
-        c['new_price'] = str(int(c['price']) / 100)
-        c['new_total_price'] = str(int(c['total_price']) / 100)
-        order_price += int(c['total_price'])
-    order_price = str(order_price / 100)
-    context = {'title': 'Your cart', 'cart': cart, 'order_price': order_price}
+    context = {'title': 'Your cart', 'cart': cart}
     return render(request, 'cart/detail.html', context)

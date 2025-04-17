@@ -1,16 +1,27 @@
 {% load static %}
+{% load custom_filters %}
 <div class="card" style="width: 18rem;">
-    <a href="{% url 'product' product_slug=product.slug %}"><img src="{% static 'errors/Product-Not-Found.png' %}" class="card-img-top" alt=""></a>
+    <a href="{% url 'product' product_slug=product.slug %}">
+        {% with product.images.first as img %}
+        {% if img and img.thumbnail %}
+        <img src="{{ img.thumbnail.url }}" class="card-img-top" alt="{{ img.alt_text }}">
+        {% elif img %}
+        <img src="{{ img.image.url }}" class="card-img-top" alt="{{ img.alt_text }}">
+        {% else %}
+        <img src="{% static 'errors/Product-Not-Found.png' %}" class="card-img-top" alt="Product not found">
+        {% endif %}
+        {% endwith %}
+    </a>
     <div class="card-body">
         <h5 class="card-title">{{ product.name|truncatechars:40 }}</h5>
-        ${{ product.real_price }}
-            <form method="post" action="{% url 'cart:cart_add' product_id=product.id %}" class="float-end">
-    {% csrf_token %}
-    <input type="hidden" name="quantity" value="1">
-    <input type="hidden" name="update" value="False">
-    <button type="submit" style="border: none; background: none;">
-        <img src="{% static 'main/Cart.jpg' %}" class="rounded" alt="Cart">
-    </button>
-</form>
+        $ {{ product.price|format100 }}
+        <form method="post" action="{% url 'cart:cart_add' product_id=product.id %}" class="float-end">
+            {% csrf_token %}
+            <input type="hidden" name="quantity" value="1">
+            <input type="hidden" name="update" value="False">
+            <button type="submit" style="border: none; background: none;">
+                <img src="{% static 'main/Cart.jpg' %}" class="rounded" alt="Cart">
+            </button>
+        </form>
     </div>
 </div>

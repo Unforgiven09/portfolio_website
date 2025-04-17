@@ -43,11 +43,13 @@ INSTALLED_APPS = [
     'news',
     'info',
     'cart',
+    'order',
     'user_info',
     'pc_builder',
     'crispy_forms',
     "crispy_bootstrap4",
     'easy_thumbnails',
+    'core_website',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -79,6 +81,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'main.context_processors.categories_processor',
+                'cart.context_processors.cart_nav',
             ],
         },
     },
@@ -133,7 +136,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

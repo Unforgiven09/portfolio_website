@@ -15,9 +15,7 @@ class Cart:
             self.cart[product_id] = {'quantity': 0, 'price': str(product.price)}
 
         if update_quantity:
-            print('first')
             if quantity == -1:
-                print('second')
                 self.cart[product_id]['quantity'] -= 1
             else:
                 self.cart[product_id]['quantity'] = quantity

@@ -1,6 +1,7 @@
 {% extends 'main/base.html' %}
 {% block content %}
 {% load static %}
+{% load custom_filters %}
 <section>
     <div class="container">
         <h1>{{ title }}</h1>
@@ -36,8 +37,8 @@
                         <button type="submit" style="border: none; background: none;">+</button>
                     </form>
                 </td>
-                <td>{{ item.new_price }}</td>
-                <td>{{ item.new_total_price }}</td>
+                <td>{{ item.price|format100 }}</td>
+                <td>{{ item.total_price|format100 }}</td>
             </tr>
             {% empty %}
             <th scope="row"></th>
@@ -49,8 +50,8 @@
             </tbody>
         </table>
         <hr>
-        Order price:<span class="float-end">{{ order_price }} $</span>
-        <p><a class="btn btn-dark float-end m-2" aria-current="page" href="{% url 'index' %}">Create order</a>
+        Order price:<span class="float-end">{{ cart.get_total_price|format100 }} $</span>
+        <p><a class="btn btn-dark float-end m-2" aria-current="page" href="{% url 'order:order_create' %}">Create order</a>
             <a class="btn btn-outline-dark float-end m-2" aria-current="page" href="{% url 'index' %}">Continue
                 shopping</a>
         </p>

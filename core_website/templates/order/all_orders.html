@@ -1,0 +1,14 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block content %}
+<section>
+    <div class="container">
+<h3>{{ title }}</h3>
+{% for order in orders %}
+{{ order.id }} - {{ order.user }}
+{% endfor %}
+    </div>
+</section>
+
+{% endblock %}

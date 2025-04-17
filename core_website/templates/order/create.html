@@ -1,0 +1,26 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<section>
+    <div class="container">
+        <h3>Your order</h3>
+        <ul>
+            {% for item in cart %}
+            <li>
+                {{ item.quantity }} x {{ item.product.name }}
+                <span>{{ item.total_price|format100 }}  $</span>
+            </li>
+            {% endfor %}
+        </ul>
+        <p>Total: {{ cart.get_total_price|format100 }} $</p>
+        <form action="" method="POST">
+            {% csrf_token %}
+            {% load crispy_forms_tags %}
+            {{ form|crispy }}
+            <input type="submit" value="Place order" class="btn btn-primary m-2">
+        </form>
+    </div>
+</section>
+{% endblock %}
