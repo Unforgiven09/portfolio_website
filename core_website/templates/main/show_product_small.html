@@ -1,15 +1,17 @@
 {% load static %}
 {% load custom_filters %}
-<div class="card" style="width: 18rem;">
+<div class="card h-100 d-flex" style="width: 15rem;">
     <a href="{% url 'product' product_slug=product.slug %}">
         {% with product.images.first as img %}
-        {% if img and img.thumbnail %}
-        <img src="{{ img.thumbnail.url }}" class="card-img-top" alt="{{ img.alt_text }}">
-        {% elif img %}
-        <img src="{{ img.image.url }}" class="card-img-top" alt="{{ img.alt_text }}">
-        {% else %}
-        <img src="{% static 'errors/Product-Not-Found.png' %}" class="card-img-top" alt="Product not found">
-        {% endif %}
+        <div class="product-image-container">
+            {% if img and img.thumbnail %}
+            <img src="{{ img.thumbnail.url }}" alt="{{ img.alt_text }}">
+            {% elif img %}
+            <img src="{{ img.image.url }}" alt="{{ img.alt_text }}">
+            {% else %}
+            <img src="{% static 'errors/Product-Not-Found.png' %}" alt="Product not found">
+            {% endif %}
+        </div>
         {% endwith %}
     </a>
     <div class="card-body">

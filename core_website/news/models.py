@@ -72,7 +72,7 @@ class Posts(models.Model):
 class CommentToPost(models.Model):
     content = models.TextField(verbose_name='Текст комментария')
     post = models.ForeignKey(Posts, on_delete=models.CASCADE, verbose_name='Пост')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор комментария', default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор комментария')
     published_date = models.DateTimeField(auto_now_add=True, verbose_name='Время')
 
     def __str__(self):

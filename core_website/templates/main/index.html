@@ -12,7 +12,7 @@
                     {% else %}
                     <div class="carousel-item">
                         {% endif %}
-                        <img src="{{ banner.image.url }}" loading="lazy" class="d-block w-100" alt="{{ banner.name }}">
+                        <img src="{{ banner.image.url }}" loading="lazy" class="d-block w-100 mx-auto" alt="{{ banner.name }}">
                     </div>
                     {% endif %}
                     {% endfor %}
@@ -30,10 +30,15 @@
             </div>
         </div>
         <div class="container">
-            {% for product in products %}
-            {% include 'main/show_product_small.html' %}
-            {% endfor %}
+            <div class="row justify-content-center gap-5">
+                {% for product in products %}
+                <div class="col-md-auto">
+                    {% include 'main/show_product_small.html' %}
+                </div>
+                {% endfor %}
+            </div>
         </div>
+    </div>
 </section>
 
 

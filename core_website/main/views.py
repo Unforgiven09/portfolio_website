@@ -19,7 +19,7 @@ def index(request):
 def product(request, product_slug):
     prod = Products.objects.filter(slug=product_slug)
     context = {
-        'title': f'Product: {prod}',
+        'title': f'Product: {prod[0]}',
         'product_info': prod
     }
     return render(request, 'main/product.html', context)

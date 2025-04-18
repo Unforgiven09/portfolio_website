@@ -17,7 +17,7 @@ class ProductForm(forms.ModelForm):
 class ProductImageForm(forms.ModelForm):
     class Meta:
         model = ProductImage
-        exclude = ('uploaded_at', 'thumbnail', )
+        exclude = ('uploaded_at', 'thumbnail', 'product', )
 
 
 class CommentToProductForm(forms.ModelForm):

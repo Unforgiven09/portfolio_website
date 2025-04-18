@@ -28,7 +28,7 @@ class Category(models.Model):
 
 
 class Products(models.Model):
-    name = models.CharField(max_length=50, verbose_name='Название')
+    name = models.CharField(max_length=255, verbose_name='Название')
     description = models.TextField(verbose_name='Описание')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
     manufacturer = models.CharField(max_length=50, blank=True)
@@ -60,7 +60,7 @@ class Products(models.Model):
 class CommentToProduct(models.Model):
     content = models.TextField(verbose_name='Текст комментария')
     post = models.ForeignKey(Products, on_delete=models.CASCADE, verbose_name='Товар')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор комментария', default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор комментария')
     published_date = models.DateTimeField(auto_now_add=True, verbose_name='Время')
 
     def __str__(self):
@@ -74,7 +74,7 @@ class CommentToProduct(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='products/')
+    image = models.ImageField(upload_to='products/', blank=True)
     alt_text = models.CharField(max_length=100, blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     thumbnail = models.ImageField(upload_to='products/thumbnails/', blank=True, null=True)
