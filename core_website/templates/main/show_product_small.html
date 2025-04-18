@@ -3,7 +3,7 @@
 <div class="card h-100 d-flex" style="width: 15rem;">
     <a href="{% url 'product' product_slug=product.slug %}">
         {% with product.images.first as img %}
-        <div class="product-image-container">
+        <div class="product-image-container-small">
             {% if img and img.thumbnail %}
             <img src="{{ img.thumbnail.url }}" alt="{{ img.alt_text }}">
             {% elif img %}

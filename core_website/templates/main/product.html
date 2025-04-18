@@ -1,11 +1,77 @@
 {% extends 'main/base.html' %}
 {% load static %}
 {% block content %}
+{% load custom_filters %}
 <section>
     <div class="container">
-        {% for product in product_info %}
-        {% include 'main/show_product_small.html' %}
-        {% endfor %}
-    </div>
+        <div class="row">
+            <div class="col-8">
+                <div class="product-image-container-big" style="min-height: 500px;">
+                    {% if product.images.exists %}
+                    <div class="carousel slide" id="carouselExample" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            {% for img in product.images.all %}
+                            {% if forloop.first %}
+                            <div class="carousel-item active">
+                                {% else %}
+                                <div class="carousel-item">
+                                    {% endif %}
+                                    <img src="{{ img.image.url }}" alt="{{ img.alt_text }}" loading="lazy">
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                                    data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                                    data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        {% else %}
+                        <img src="{% static 'errors/Product-Not-Found.png' %}" alt="Product not found">
+                        {% endif %}
+                    </div>
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Characteristics</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for verbose, value in product_fields.items %}
+                        {% if value %}
+                        <tr>
+                            <td>{{ verbose }}</td>
+                            <td>{{ value }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-4">
+                    <div>
+                        <p class="float-end m-2">product id: {{ product.id }}</p>
+                    </div>
+                    <div class="p-3 text-primary-emphasis bg-light-subtle border border-success-subtle rounded-3 mt-5">
+                        <h3>{{ product.name }}</h3>
+                        $ {{ product.price|format100 }}
+                        <form method="post" action="{% url 'cart:cart_add' product_id=product.id %}" class="float-end">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <input type="hidden" name="update" value="False">
+                            <button type="submit" style="border: none; background: none;">
+                                <img src="{% static 'main/Cart.jpg' %}" class="rounded" alt="Cart">
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 </section>
 {% endblock %}

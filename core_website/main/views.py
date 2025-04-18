@@ -17,10 +17,15 @@ def index(request):
 
 
 def product(request, product_slug):
-    prod = Products.objects.filter(slug=product_slug)
+    prod = get_object_or_404(Products, slug=product_slug)
+    exclude_fields = ['id', 'slug', 'is_available', 'name', 'price',]
     context = {
-        'title': f'Product: {prod[0]}',
-        'product_info': prod
+        'title': f'Product: {prod.name}',
+        'product': prod,
+        'product_fields': {
+        field.verbose_name: getattr(prod, field.name)
+        for field in prod._meta.fields if field.name not in exclude_fields
+    }
     }
     return render(request, 'main/product.html', context)
 
