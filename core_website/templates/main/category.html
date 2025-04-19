@@ -7,13 +7,13 @@
         <p>{{ category.description }}</p>
             </div>
         {% if category.is_parent %}
-        <ul>
+        <div class="list-group">
             {% for child in categories %}
             {% if child.parent.id == category.id %}
-            <li><a href="{% url 'category' category_slug=child.slug %}">{{ child.name }}</a></li>
+            <a href="{% url 'category' category_slug=child.slug %}" class="list-group-item list-group-item-action bg-info-subtle">{{ child.name }}</a>
             {% endif %}
             {% endfor %}
-        </ul>
+        </div>
         {% else %}
         <div class="container">
             <div class="row justify-content-center gap-5">

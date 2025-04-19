@@ -59,12 +59,12 @@ class Products(models.Model):
 
 class CommentToProduct(models.Model):
     content = models.TextField(verbose_name='Текст комментария')
-    post = models.ForeignKey(Products, on_delete=models.CASCADE, verbose_name='Товар')
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, verbose_name='Товар')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор комментария')
     published_date = models.DateTimeField(auto_now_add=True, verbose_name='Время')
 
     def __str__(self):
-        return f'Комментарий к посту "{self.post}" от пользователя "{self.user}"'
+        return f'Комментарий к товару "{self.product}" от пользователя "{self.user}"'
 
     class Meta:
         verbose_name = 'Комментарий к товару'

@@ -35,6 +35,7 @@
                         <img src="{% static 'errors/Product-Not-Found.png' %}" alt="Product not found">
                         {% endif %}
                     </div>
+                    <div>
                     <table class="table table-hover">
                         <thead>
                         <tr>
@@ -53,6 +54,25 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                    </div>
+                    <div>
+                        <h2>Comments</h2>
+                    {% for comment in comments %}
+                    <div class="mb-2">
+                        <strong>{{ comment.user }}</strong>: {{ comment.content }}<br>
+                        <small>{{ comment.published_date }}</small>
+                    </div>
+                    {% endfor %}
+                    {% if user.is_authenticated %}
+                    <h3>Add a comment</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        {% load crispy_forms_tags %}
+                        {{ add_comment|crispy }}
+                        <button type="submit" class="btn btn-primary m-2">Post Comment</button>
+                    </form>
+                    {% endif %}
+                    </div>
                 </div>
                 <div class="col-4">
                     <div>

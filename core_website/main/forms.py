@@ -23,7 +23,7 @@ class ProductImageForm(forms.ModelForm):
 class CommentToProductForm(forms.ModelForm):
     class Meta:
         model = CommentToProduct
-        exclude = ('published_date', 'user', )
+        exclude = ('published_date', 'user', 'product',)
 
 
 class BannerForm(forms.ModelForm):

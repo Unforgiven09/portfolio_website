@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.forms import modelformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Products, Category, ProductImage, Banner
+from .models import Products, Category, ProductImage, Banner, CommentToProduct
 from .forms import CategoryForm, ProductForm, ProductImageForm, CommentToProductForm, BannerForm
 
 
@@ -19,9 +19,22 @@ def index(request):
 def product(request, product_slug):
     prod = get_object_or_404(Products, slug=product_slug)
     exclude_fields = ['id', 'slug', 'is_available', 'name', 'price',]
+    comments = CommentToProduct.objects.filter(product=prod)
+    if request.method == 'POST':
+        form = CommentToProductForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.product = prod
+            comment.save()
+            return redirect('product', product_slug=prod.slug)
+    else:
+        form = CommentToProductForm()
     context = {
         'title': f'Product: {prod.name}',
         'product': prod,
+        'comments': comments,
+        'add_comment': form,
         'product_fields': {
         field.verbose_name: getattr(prod, field.name)
         for field in prod._meta.fields if field.name not in exclude_fields
