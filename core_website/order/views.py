@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import OrderItem, Order
-from .forms import OrderCreateForm
+from .forms import OrderCreateForm, OrderStatusUpdateForm
 from cart.cart import Cart
 
 
@@ -35,3 +35,21 @@ def all_orders(request):
         'orders': orders
     }
     return render(request, 'order/all_orders.html', context)
+
+
+def order_info(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+
+    if request.method == 'POST':
+        form = OrderStatusUpdateForm(request.POST, instance=order)
+        if form.is_valid():
+            form.save()
+    else:
+        form = OrderStatusUpdateForm(instance=order)
+
+    context = {
+        'title': f'Order #{order.id}',
+        'order': order,
+        'form': form
+    }
+    return render(request, 'order/order_info.html', context)
