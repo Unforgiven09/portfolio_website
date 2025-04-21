@@ -83,6 +83,10 @@
                         {{ form.paid }}
                         <button type="submit" class="btn btn-outline-success">Change</button>
                     </form>
+                    <a href="{% url 'order:order_word' order.id %}" class="btn btn-outline-info mt-2"
+                       target="_blank">
+                        Download Word
+                    </a>
                 </div>
             </div>
         </div>

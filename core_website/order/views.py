@@ -3,6 +3,7 @@ from django.contrib import messages
 from .models import OrderItem, Order
 from .forms import OrderCreateForm, OrderStatusUpdateForm
 from cart.cart import Cart
+from .extract import order_word
 
 
 def order_create(request):
@@ -18,8 +19,8 @@ def order_create(request):
                                          product=item['product'],
                                          price=item['price'],
                                          quantity=item['quantity'])
-                cart.clear()
-                return render(request, 'order/created.html', {'title': 'Order created', 'order': order})
+            cart.clear()
+            return render(request, 'order/created.html', {'title': 'Order created', 'order': order})
         else:
             messages.info(request, "Invalid form.")
             return redirect(request.META.get('HTTP_REFERER', 'cart:cart_detail'))
