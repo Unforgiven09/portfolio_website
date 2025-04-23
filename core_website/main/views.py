@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.forms import modelformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
@@ -7,10 +8,13 @@ from .forms import CategoryForm, ProductForm, ProductImageForm, CommentToProduct
 
 def index(request):
     products = Products.objects.filter(is_available=True)
+    paginator = Paginator(products, 12)
     banners = Banner.objects.filter(is_published=True)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     context = {
         'title': 'CORE: computers and components',
-        'products': products,
+        'products': page_obj,
         'banners': banners,
     }
     return render(request, 'main/index.html', context)

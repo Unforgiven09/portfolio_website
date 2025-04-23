@@ -13,7 +13,7 @@ def order_word(request, order_id):
 
     document.add_paragraph('Seller Info')
 
-    seller_table = document.add_table(rows=7, cols=2)
+    seller_table = document.add_table(rows=6, cols=2)
     seller_table.style = 'Table Grid'
     info = [
         ('Seller', 'Core Official Store'),
@@ -30,7 +30,7 @@ def order_word(request, order_id):
 
     document.add_paragraph('\nCustomer info')
 
-    customer_table = document.add_table(rows=6, cols=2)
+    customer_table = document.add_table(rows=7, cols=2)
     customer_table.style = 'Table Grid'
     info = [
         ('User', str(order.user)),

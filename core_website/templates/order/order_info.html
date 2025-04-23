@@ -74,6 +74,7 @@
                 </div>
                 <div class="col-4">
                     <h5>Actions</h5>
+                    {% if user.is_staff %}
                     <form method="post">
                         {% csrf_token %}
                         {% load crispy_forms_tags %}
@@ -83,6 +84,7 @@
                         {{ form.paid }}
                         <button type="submit" class="btn btn-outline-success">Change</button>
                     </form>
+                    {% endif %}
                     <a href="{% url 'order:order_word' order.id %}" class="btn btn-outline-info mt-2"
                        target="_blank">
                         Download Word

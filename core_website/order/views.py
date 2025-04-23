@@ -25,7 +25,16 @@ def order_create(request):
             messages.info(request, "Invalid form.")
             return redirect(request.META.get('HTTP_REFERER', 'cart:cart_detail'))
     else:
-        form = OrderCreateForm()
+        initial_data = {}
+        if request.user.is_authenticated:
+            user_info = getattr(request.user, 'user_info', None)
+            if user_info:
+                initial_data = {
+                    'first_name': user_info.first_name,
+                    'last_name': user_info.last_name,
+                    'email': user_info.email,
+                }
+        form = OrderCreateForm(initial=initial_data)
         return render(request, 'order/create.html', {'title': 'Order creation', 'cart': cart, 'form': form})
 
 
@@ -54,3 +63,12 @@ def order_info(request, order_id):
         'form': form
     }
     return render(request, 'order/order_info.html', context)
+
+
+def all_user_orders(request, user_id):
+    orders = Order.objects.filter(user=user_id)
+    context = {
+        'title': f'All orders',
+        'orders': orders
+    }
+    return render(request, 'order/all_orders.html', context)

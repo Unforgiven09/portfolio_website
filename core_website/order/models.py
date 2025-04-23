@@ -21,7 +21,7 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_order', verbose_name='User created order')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders', verbose_name='User created order')
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
