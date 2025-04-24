@@ -73,7 +73,7 @@ def add_category(request, category_slug=None):
             form = CategoryForm()
     else:
         category_to_change = get_object_or_404(Category, slug=category_slug)
-        title = f'Change banner: {category_to_change.name}'
+        title = f'Change category: {category_to_change.name}'
         if request.method == 'POST':
             form = CategoryForm(request.POST, instance=category_to_change)
             if form.is_valid():
@@ -93,7 +93,7 @@ def add_product(request, product_slug=None):
         product = None
     else:
         product = get_object_or_404(Products, slug=product_slug)
-        title = f'Change banner: {product.name}'
+        title = f'Change product: {product.name}'
     if request.method == 'POST':
         form = ProductForm(request.POST, instance=product)
         formset = ProductImageFormSet(request.POST, request.FILES,
@@ -171,9 +171,11 @@ def admin_categories(request):
 
 def admin_products(request):
     products = Products.objects.all()
+    pc_builder_cats = ['GPU', 'Motherboard', 'PSU', 'Processors', 'RAM', 'SSD']
     context = {
         'title': 'All products',
         'products': products,
+        'pc_builder_cats': pc_builder_cats,
     }
     return render(request, 'main/admin_products.html', context)
 

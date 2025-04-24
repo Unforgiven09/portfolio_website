@@ -4,7 +4,8 @@
     <div class="container">
         <a href="{% url 'add_product_new' %}" class="btn btn-secondary mt-2">Add new product</a>
         {% for product in products %}
-        <p>{{ product.name }} <a href="{% url 'add_product' product_slug=product.slug %}">Change</a></p>
+        <p>{{ product.name }} <a href="{% url 'add_product' product_slug=product.slug %}">Change</a>
+        {% if product.category.name in pc_builder_cats %}<a href="{% url 'part_info_update' product.id %}">PC builder info update</a>{% endif %}</p>
         {% endfor %}
     </div>
 </section>
