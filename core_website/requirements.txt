@@ -3,6 +3,9 @@ crispy-bootstrap4
 Django
 django-crispy-forms
 easy-thumbnails
+lxml
 pillow
+python-docx
 sqlparse
+typing_extensions
 tzdata
