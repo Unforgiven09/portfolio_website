@@ -16,4 +16,5 @@ urlpatterns = [
     path("admin-categories/", views.admin_categories, name="admin_categories"),
     path("admin-products/", views.admin_products, name="admin_products"),
     path("admin-panel/", views.admin_panel, name="admin_panel"),
+    path("search/", views.search, name="search_products"),
 ]

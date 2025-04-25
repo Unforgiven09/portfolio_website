@@ -1,5 +1,6 @@
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.forms import modelformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Products, Category, ProductImage, Banner, CommentToProduct
@@ -185,3 +186,11 @@ def admin_panel(request):
         'title': 'Admin panel',
     }
     return render(request, 'main/admin_panel.html', context)
+
+
+def search(request):
+    query = request.GET.get('query')
+    products = Products.objects.filter(Q(name__icontains=query) | Q(id__icontains=query))
+    context = {'title': f'Products by search: {query}',
+               'products': products}
+    return render(request, "main/index.html", context)
