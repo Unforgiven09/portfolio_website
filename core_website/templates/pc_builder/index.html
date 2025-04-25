@@ -1,6 +1,260 @@
 {% extends 'main/base.html' %}
+{% load static %}
+{% load custom_filters %}
 {% block content %}
 <section>
-    <h1>{{title}}</h1>
+    <div class="container">
+        <h1>{{title}}</h1>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect01">Motherboard</label>
+            <select class="form-select" id="inputGroupSelect01" onchange="updateInfo('mb')">
+                <option selected>Choose motherboard</option>
+                {% for x in motherboards %}
+                <option value="{{ loop.index0 }}"
+                        data-price="{{ x.product.price|format100 }} $"
+                        data-modelSeries="{{ x.model_series }}"
+                        data-usb="{{ x.usb_ports }}"
+                        data-chipset="{{ x.chipset }}"
+                        data-cart="{% url 'cart:cart_add' product_id=x.product.id %}"
+                        data-socket-mb2cpu="{{ x.socket_mb2cpu }}"
+                        data-socket-mb2gpu="{{ x.socket_mb2gpu }}"
+                        data-socket-mb2ssd="{{ x.socket_mb2ssd }}"
+                        data-socket-mb2ram="{{ x.socket_mb2ram }}"
+                        data-socket-mb2psu="{{ x.socket_mb2psu }}">
+                    {{ x.product.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id="info_mb" style="margin-top: 10px;"></div>
+
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect02">GPU</label>
+            <select class="form-select" id="inputGroupSelect02" onchange="updateInfo('gpu')">
+                <option selected>Choose GPU</option>
+                {% for x in GPUs %}
+                <option value="{{ loop.index0 }}"
+                        data-price="{{ x.product.price|format100 }} $"
+                        data-modelSeries="{{ x.model_series }}"
+                        data-frequency="{{ x.frequency }}"
+                        data-recommendedPowerSupply="{{ x.recommended_power_supply }}W"
+                        data-cart="{% url 'cart:cart_add' product_id=x.product.id %}"
+                        data-socket-mb2gpu="{{ x.socket_mb2gpu }}">
+                    {{ x.product.name }}, socket = {{ x.socket_mb2gpu }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id="info_gpu" style="margin-top: 10px;"></div>
+
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect03">PSU</label>
+            <select class="form-select" id="inputGroupSelect03" onchange="updateInfo('psu')">
+                <option selected>Choose PSU</option>
+                {% for x in PSUs %}
+                <option value="{{ loop.index0 }}"
+                        data-price="{{ x.product.price|format100 }} $"
+                        data-modelSeries="{{ x.model_series }}"
+                        data-psuPower="{{ x.psu_power }}W"
+                        data-cart="{% url 'cart:cart_add' product_id=x.product.id %}"
+                        data-socket-mb2psu="{{ x.socket_mb2psu }}">
+                    {{ x.product.name }}, socket = {{ x.socket_mb2psu }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id="info_psu" style="margin-top: 10px;"></div>
+
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect04">Processor</label>
+            <select class="form-select" id="inputGroupSelect04" onchange="updateInfo('processor')">
+                <option selected>Choose processor</option>
+                {% for x in processors %}
+                <option value="{{ loop.index0 }}"
+                        data-price="{{ x.product.price|format100 }} $"
+                        data-modelSeries="{{ x.model_series }}"
+                        data-frequency="{{ x.frequency }}"
+                        data-recommendedPowerSupply="{{ x.recommended_power_supply }}W"
+                        data-cart="{% url 'cart:cart_add' product_id=x.product.id %}"
+                        data-socket-mb2cpu="{{ x.socket_mb2cpu }}">
+                    {{ x.product.name }}, socket = {{ x.socket_mb2cpu }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id="info_processor" style="margin-top: 10px;"></div>
+
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect05">RAM</label>
+            <select class="form-select" id="inputGroupSelect05" onchange="updateInfo('ram')">
+                <option selected>Choose RAM</option>
+                {% for x in RAMs %}
+                <option value="{{ loop.index0 }}"
+                        data-price="{{ x.product.price|format100 }} $"
+                        data-modelSeries="{{ x.model_series }}"
+                        data-memorySize="{{ x.memory_size }}"
+                        data-cart="{% url 'cart:cart_add' product_id=x.product.id %}"
+                        data-socket-mb2ram="{{ x.socket_mb2ram }}">
+                    {{ x.product.name }}, socket = {{ x.socket_mb2ram }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id="info_ram" style="margin-top: 10px;"></div>
+
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect06">SSD</label>
+            <select class="form-select" id="inputGroupSelect06" onchange="updateInfo('ssd')">
+                <option selected>Choose SSD</option>
+                {% for x in SSDs %}
+                <option value="{{ loop.index0 }}"
+                        data-price="{{ x.product.price|format100 }} $"
+                        data-modelSeries="{{ x.model_series }}"
+                        data-memorySize="{{ x.memory_size }}"
+                        data-cart="{% url 'cart:cart_add' product_id=x.product.id %}"
+                        data-socket-mb2ssd="{{ x.socket_mb2ssd }}">
+                    {{ x.product.name }}, socket = {{ x.socket_mb2ssd }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id="info_ssd" style="margin-top: 10px;"></div>
+        <form id="multiCartForm" action="{% url 'cart:add_multiple' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="product_ids" id="product_ids_input">
+            <button type="submit" class="btn btn-success mt-3 mb-3">Add all to cart</button>
+        </form>
+    </div>
 </section>
+
+<script>
+    function updateInfo(component) {
+        const ids = {
+            mb: { select: "inputGroupSelect01", info: "info_mb" },
+            gpu: { select: "inputGroupSelect02", info: "info_gpu" },
+            psu: { select: "inputGroupSelect03", info: "info_psu" },
+            processor: { select: "inputGroupSelect04", info: "info_processor" },
+            ram: { select: "inputGroupSelect05", info: "info_ram" },
+            ssd: { select: "inputGroupSelect06", info: "info_ssd" }
+        };
+
+        const select = document.getElementById(ids[component].select);
+        const selectedOption = select.options[select.selectedIndex];
+        const infoDiv = document.getElementById(ids[component].info);
+
+        const price = selectedOption.getAttribute("data-price") || "-";
+        const modelSeries = selectedOption.getAttribute("data-modelSeries") || "-";
+        const cart = selectedOption.getAttribute("data-cart");
+
+        let details = `<p><strong>Price:</strong> ${price}
+                       <strong>Model series:</strong> ${modelSeries}`;
+
+        if (component === "mb") {
+            details += `<strong>USB ports:</strong> ${selectedOption.getAttribute("data-usb") || "-"}
+                        <strong>Chipset:</strong> ${selectedOption.getAttribute("data-chipset") || "-"}`;
+        } else if (component === "gpu" || component === "processor") {
+            details += `<strong>Frequency:</strong> ${selectedOption.getAttribute("data-frequency") || "-"}
+                        <strong>Recommended power supply:</strong> ${selectedOption.getAttribute("data-recommendedPowerSupply") || "-"}`;
+        } else if (component === "psu") {
+            details += `<strong>PSU power:</strong> ${selectedOption.getAttribute("data-psuPower") || "-"}`;
+        } else if (component === "ram" || component === "ssd") {
+            details += `<strong>Memory size:</strong> ${selectedOption.getAttribute("data-memorySize") || "-"}`;
+        }
+        details += `</p>`;
+
+        infoDiv.innerHTML = details;
+        if (component) {
+            checkCompatibility();
+        }
+        if (component === "psu" || component === "gpu" || component === "processor") {
+            checkPSUCompatibility();
+        }
+    }
+
+    function checkCompatibility() {
+        const mbSelect = document.getElementById("inputGroupSelect01");
+        const mbOption = mbSelect.options[mbSelect.selectedIndex];
+
+        if (!mbOption || !mbOption.hasAttribute("data-socket-mb2cpu")) return;
+
+        const sockets = {
+            processor: mbOption.getAttribute("data-socket-mb2cpu"),
+            gpu: mbOption.getAttribute("data-socket-mb2gpu"),
+            ram: mbOption.getAttribute("data-socket-mb2ram"),
+            ssd: mbOption.getAttribute("data-socket-mb2ssd"),
+            psu: mbOption.getAttribute("data-socket-mb2psu"),
+        };
+
+        const selectedSockets = {
+            processor: document.querySelector('#inputGroupSelect04 option:checked')?.getAttribute("data-socket-mb2cpu"),
+            gpu: document.querySelector('#inputGroupSelect02 option:checked')?.getAttribute("data-socket-mb2gpu"),
+            ram: document.querySelector('#inputGroupSelect05 option:checked')?.getAttribute("data-socket-mb2ram"),
+            ssd: document.querySelector('#inputGroupSelect06 option:checked')?.getAttribute("data-socket-mb2ssd"),
+            psu: document.querySelector('#inputGroupSelect03 option:checked')?.getAttribute("data-socket-mb2psu"),
+        };
+
+        let compatibility = `<p><strong>Compatibility check:</strong><br>`;
+        for (const key in sockets) {
+            const match = sockets[key] && sockets[key] === selectedSockets[key];
+            const icon = match ? "✅" : "❌";
+            compatibility += `<strong>Socket ${key.toUpperCase()}:</strong> ${sockets[key] || "-"} ${icon}<br>`;
+        }
+        compatibility += `</p>`;
+
+        const infoDiv = document.getElementById("info_mb");
+        const baseInfo = infoDiv.innerHTML.split("<p><strong>Compatibility check:")[0];  // Убираем старую проверку
+        infoDiv.innerHTML = baseInfo + compatibility;
+    }
+
+    function collectSelectedProducts() {
+        const selectIds = [
+            "inputGroupSelect01", "inputGroupSelect02", "inputGroupSelect03",
+            "inputGroupSelect04", "inputGroupSelect05", "inputGroupSelect06"
+        ];
+        const productIds = [];
+
+        selectIds.forEach(id => {
+            const select = document.getElementById(id);
+            const option = select.options[select.selectedIndex];
+            const cartUrl = option.getAttribute("data-cart");
+            if (cartUrl) {
+                const match = cartUrl.match(/\/cart\/add\/(\d+)\//);
+                if (match) {
+                    productIds.push(match[1]);
+                }
+            }
+        });
+        document.getElementById("product_ids_input").value = productIds.join(",");
+    }
+
+    document.getElementById("multiCartForm").addEventListener("submit", function (e) {
+        collectSelectedProducts();
+    });
+
+    function checkPSUCompatibility() {
+        const psuSelect = document.getElementById("inputGroupSelect03");
+        const psuOption = psuSelect.options[psuSelect.selectedIndex];
+
+        if (!psuOption) return;
+
+        const psuPower = parseInt(psuOption.getAttribute("data-psuPower") || 0);
+
+        const gpuPower = parseInt(document.querySelector('#inputGroupSelect02 option:checked')?.getAttribute("data-recommendedPowerSupply") || 0);
+        const cpuPower = parseInt(document.querySelector('#inputGroupSelect04 option:checked')?.getAttribute("data-recommendedPowerSupply") || 0);
+
+        const totalRequired = gpuPower + cpuPower;
+
+        const compatible = psuPower >= totalRequired;
+        const icon = compatible ? "✅" : "❌";
+
+        const infoDiv = document.getElementById("info_psu");
+        const baseInfo = infoDiv.innerHTML.split("<p><strong>PSU compatibility:")[0];  // очистка старого блока
+        infoDiv.innerHTML = baseInfo + `
+            <p><strong>PSU compatibility:</strong><br>
+            PSU Power: ${psuPower}W<br>
+            Required Power (GPU + CPU): ${totalRequired}W ${icon}
+            </p>
+        `;
+    }
+</script>
 {% endblock %}

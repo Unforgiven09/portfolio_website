@@ -1,12 +1,26 @@
 from django.shortcuts import render, redirect, get_object_or_404
-
+from .models import Parts
 from main.models import Products
 from .forms import PartsForm
 
 
 def index(request):
+    motherboards = Parts.objects.filter(product__category__name='Motherboard')
+    GPUs = Parts.objects.filter(product__category__name='GPU')
+    PSUs = Parts.objects.filter(product__category__name='PSU')
+    processors = Parts.objects.filter(product__category__name='Processors')
+    RAMs = Parts.objects.filter(product__category__name='RAM')
+    SSDs = Parts.objects.filter(product__category__name='SSD')
+
     context = {
-        'title': 'PC builder'
+        'title': 'PC builder',
+        'motherboards': motherboards,
+        'GPUs': GPUs,
+        'PSUs': PSUs,
+        'processors': processors,
+        'RAMs': RAMs,
+        'SSDs': SSDs,
+
     }
     return render(request, 'pc_builder/index.html', context)
 

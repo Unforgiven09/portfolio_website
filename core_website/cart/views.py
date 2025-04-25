@@ -41,3 +41,17 @@ def cart_detail(request):
     cart = Cart(request)
     context = {'title': 'Your cart', 'cart': cart}
     return render(request, 'cart/detail.html', context)
+
+
+@require_POST
+def add_multiple(request):
+    product_ids = request.POST.get("product_ids", "").split(",")
+    cart = Cart(request)
+
+    for pid in product_ids:
+        if pid.isdigit():
+            product = get_object_or_404(Products, id=int(pid))
+            cart.add(product=product, quantity=1, update_quantity=False)
+            messages.success(request, f"{product.name} added to cart.")
+
+    return redirect("cart:cart_detail")
